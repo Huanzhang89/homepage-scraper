@@ -1,0 +1,9 @@
+.info-box {
+  position:absolute;
+  width: auto;
+  height: auto;
+  display: none;
+  top: 5px;
+  right: 5px;
+  background-color: red;
+}

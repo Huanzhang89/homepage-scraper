@@ -4,10 +4,6 @@
   "name": "TM Homepage Scraper",
   "description": "This extension scrapes the current page and returns a list of article id present on the page",
   "version": "1.0",
-  "background": {
-    "persistent": false,
-    "scripts": ["background.js"]
-  },
   "browser_action": {
     "icons": {
       "16": "icon-16.png",

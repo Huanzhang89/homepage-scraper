@@ -1,6 +1,6 @@
 var toggleButton = document.querySelector("input")
 function saveToLocal () {
-  sessionStorage.setItem('checkboxState', toggleButton.checked);
+  localStorage.setItem('checkboxState', toggleButton.checked);
   animateCheckbox();
   chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
     chrome.tabs.sendMessage(tabs[0].id, {checkboxState: toggleButton.checked}, function(response) {
@@ -10,7 +10,7 @@ function saveToLocal () {
 }
 
 function loadFromLocal () {
-  toggleButton.checked = JSON.parse(sessionStorage.getItem('checkboxState'));
+  toggleButton.checked = JSON.parse(localStorage.getItem('checkboxState'));
   animateCheckbox();
 }
 

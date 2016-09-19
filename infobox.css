@@ -1,9 +1,16 @@
 .info-box {
   position:absolute;
-  width: auto;
+  width: 200px;
   height: auto;
+  background-color: #eee;
+  border: 5px solid #888;
+  z-index: 999;
   display: none;
   top: 5px;
   right: 5px;
-  background-color: red;
+  padding: 20px;
+}
+
+li {
+  list-style: none;
 }

@@ -23,8 +23,9 @@ function createInfoBox() {
   document.body.appendChild(infoBox);
 }
 
-function displayInfoBox () {
+function displayInfoBox (duplicateStoryIds) {
   var infoBox = document.querySelector('.info-box');
+  pushToInfoBox(duplicateStoryIds);
   infoBox.style.display = 'block';
 }
 
@@ -33,34 +34,53 @@ function hideInfoBox () {
   infoBox.style.display = 'none';
 }
 
+function pushToInfoBox (idArray) {
+  var msg = document.createElement('div');
+  var infoBox = document.querySelector('.info-box');
+  if (idArray.length === 0) {
+    msg.innerHTML = "There are no duplicate articles on the page.";
+    infoBox.appendChild(msg);
+  } else if (infoBox) {
+    msg.innerHTML = "The following duplicates have been found on the page:";
+    infoBox.appendChild(msg);
+    idArray.forEach(function(id) {
+      var el = document.createElement('li');
+      el.innerHTML = id;
+      infoBox.appendChild(el);
+    })
+  }
+}
+
 function init() {
   var allComments = getAllComments(document.body);
-  var storyComments = allComments.filter(function(comment) {
+  var storyComments = [];
+  storyComments = allComments.filter(function(comment) {
     return comment.nodeValue.match("name: stories");
   }).map(function(comment) {
     return comment.nodeValue.match(/(\d+)/g)[0];
   });
 
+  // storyComments.push("123", "456");
+  // storyComments.push("123", "456");
   let duplicateStoryIds = storyComments.filter(function(comment, i) {
     return storyComments.indexOf(comment) != i;
   })
-  console.log(duplicateStoryIds);
+
   createInfoBox();
+
+  if (localStorage.getItem('checkboxState')) {
+    displayInfoBox(duplicateStoryIds);
+  }
+
   chrome.runtime.onMessage.addListener(function(message, sender, response) {
-      console.log(message.checkboxState);
+      localStorage.setItem('checkboxState', message.checkboxState);
       if (message.checkboxState ===  true) {
-        console.log('on');
-        console.log(duplicateStoryIds);
-        displayInfoBox();
+        displayInfoBox(duplicateStoryIds);
       } else {
+        document.querySelector('.info-box').innerHTML = "";
         hideInfoBox();
-        console.log('off');
       }
   });
-
 }
 
-chrome.runtime.onMessage.addListener(function(req, sender, sendRes) {
-  console.log('content script message received');
-})
 init();
